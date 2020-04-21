@@ -1,6 +1,6 @@
 cleanBackEnd(){
   ./gradlew clean :backend:build
-  ./gradlew clean :dams-client:build
+  ./gradlew clean :some-client:build
 }
 
 read -p "Clean backend? (Say y if you do hun) " answer
@@ -33,7 +33,7 @@ fi
 
 
 lintHer(){
-  cd dams-webapp
+  cd some-webapp
   ng lint
   cd ..
 }
@@ -46,8 +46,7 @@ if [ "$lintHerAye" == 'y' ]; then
 fi
 
 testUi(){
-  cd dams-webapp
-  ng xi18n --output-path locale
+  cd some-webapp
   ng test --watch false
   cd ..
 }
@@ -60,7 +59,7 @@ if [ "$testUiAye" == 'y' ]; then
 fi
 
 teste2e(){
-  cd dams-webapp
+  cd some-webapp
   ng e2e
   cd ..
 }
