@@ -1,74 +1,90 @@
 cleanBackEnd(){
   ./gradlew clean :backend:build
-  ./gradlew clean :some-client:build
 }
 
-read -p "Clean backend? (Say y if you do hun) " answer
-if [ "$answer" == 'y' ]; then
- echo "clean BackEnd"
+read -n1 -r -p "Lint and run backend unit tests? (Enter y if you do)) " answer
+if [[ "$answer" =~ ^([yY])$ ]]
+then
+ printf "\n cleaning BackEnd"
  cleanBackEnd
 fi
 
-resetDatabase(){
-  docker-compose down
-  docker-compose up -d
+cleanClient(){
+  ./gradlew clean :some-client:build
 }
 
-read -p "Reset DB? (Say y if you do hun) " resetDb
-if [ "$resetDb" == 'y' ]; then
- echo "resetting Database"
- resetDatabase
+read -n1 -r -p "Lint and run client unit tests? (Enter y if you do) " answer
+if [[ "$answer" =~ ^([yY])$ ]]
+then
+ printf "\n clean client"
+ cleanClient
 fi
 
 runIntegrationTests(){
   ./gradlew :backend:integrationTest
 }
 
-
-read -p "Run integrationTests? (Say y if you do hun) " runDem
-if [ "$runDem" == 'y' ]; then
- echo "Running integrationTests"
+read -n1 -r -p "Run integrationTests? (Enter y if you do) " answer
+if [[ "$answer" =~ ^([yY])$ ]]
+then
+ printf "\n Running integrationTests"
  runIntegrationTests
 fi
 
-
 lintHer(){
-  cd some-webapp
-  ng lint
+  cd some-webapp || exit
+  ng lint --fix
   cd ..
 }
 
-read -p "Lint 'er? (Say y if you do hun) " lintHerAye
+read -n1 -r -p "Lint the frontend? (Enter y if you do) " answer
 
-if [ "$lintHerAye" == 'y' ]; then
- echo "linting the webapp"
+if [[ "$answer" =~ ^([yY])$ ]]
+then
+ printf "\n linting the webapp"
  lintHer
 fi
 
+localiseHer(){
+  cd some-webapp || exit
+  ng xi18n --output-path locale
+  cd ..
+}
+
+read -n1 -r -p "localise frontend? (Enter y if you do) " answer
+
+if [[ "$answer" =~ ^([yY])$ ]]
+then
+ printf "\n localising the webapp"
+ localiseHer
+fi
+
 testUi(){
-  cd some-webapp
+  cd some-webapp || exit
   ng test --watch false
   cd ..
 }
 
-read -p "Test Frontend? (Say y if you do hun) " testUiAye
+read -n1 -r -p "Unit test Frontend? (Enter y if you do) " answer
 
-if [ "$testUiAye" == 'y' ]; then
- echo "testing Ui"
+if [[ "$answer" =~ ^([yY])$ ]]
+then
+ printf "\n testing Ui"
  testUi
 fi
 
-teste2e(){
-  cd some-webapp
+testE2e(){
+  cd some-webapp || exit
   ng e2e
   cd ..
 }
 
-read -p "Run e2e? (Say y if you do hun) " teste2eAye
+read -n1 -r -p "Run e2e? (Enter y if you do) " answer
 
-if [ "$teste2eAye" == 'y' ]; then
- echo "running e2e"
- teste2e
+if [[ "$answer" =~ ^([yY])$ ]]
+then
+ printf "\n running e2e"
+ testE2e
 fi
 
 pushToGit(){
@@ -77,9 +93,10 @@ pushToGit(){
    git push
 }
 
-read -p "Push to git? (Say y if you do hun) " answer
+read -n1 -r -p "Push to git? (Enter y if you do) " answer
 
-if [ "$answer" == 'y' ]; then
- read -p  "Commit message: " message
+if [[ "$answer" =~ ^([yY])$ ]]
+then
+ read -p -r "\n Commit message: " message
  pushToGit "$message"
 fi
