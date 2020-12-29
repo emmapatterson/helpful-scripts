@@ -97,6 +97,6 @@ read -n1 -r -p "Push to git? (Enter y if you do) " answer
 
 if [[ "$answer" =~ ^([yY])$ ]]
 then
- read -p -r "\n Commit message: " message
+ read -p "Commit message: " message
  pushToGit "$message"
 fi
